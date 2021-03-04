@@ -1,0 +1,291 @@
+{extend name="layout/base" /}
+
+{block name="style"}
+<style type="text/css">
+    .table>tbody>tr>td{padding: 3px 5px;}
+</style>
+{/block}
+
+{block name="body"}
+<div class="wrapper wrapper-content">
+
+<div class="row animated fadeIn">
+    <div class="col-xs-12">
+        <div class="ibox box-success">
+            <div class="ibox-title">
+                <h5>权限列表</h5>
+            </div>
+            <div class="panel-body ibox-content mainbox">
+                <div id="app">
+                <table class="table table-striped cs_table-hover">
+                    <tr>
+                        <th width="5%">排序</th>
+                        <th>权限名</th>
+                        <th>连接</th>
+                        <th>操作</th>
+                    </tr>
+                    <tr v-for='(data, idx) in dds'>
+                        <td>
+                            <input class="form-control input-medium" style="width:40px;height:25px;padding:3px 3px;" type="text" v-model="data.ord" @change="ordItem(idx, data.id)" />
+                        </td>
+                        <td v-html="data.name"></td>
+                        <td>{{data.mca}}</td>
+                        <td>
+                            <a href="javascript:;" @click="addItem(idx, data.id)">添加子权限</a> |
+                            <a href="javascript:;" @click="editItem(idx, data.id)">修改</a> |
+                            <a href="javascript:;" @click="delItem(idx, data.id)">删除</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                </div><!--app-->
+            </div>
+        </div>
+
+    </div><!--col-md-->
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
+<div class="modal-dialog">
+<div class="modal-content">
+    <form action="" method="post">
+        <div class="modal-header">
+            <button type="button" class="close closeModal" aria-hidden="true"> &times;</button>
+            <h4 class="modal-title" id="editModalLabel">权限管理</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group colbatch">
+                <div class="row">
+                    <label class="col-xs-3 ilabel">批量添加：</label>
+                    <div class="col-xs-5">
+                        <input class="i-checks isbatch" name="isbatch" value="true" type="checkbox" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group fmulti" style="display: none;">
+                <div class="row">
+                    <label class="col-xs-3 ilabel"></label>
+                    <div class="col-xs-8">
+                        <textarea class="form-control" name="rawbatch" cols="10" rows="9"></textarea>
+                        <div class="m-t-sm"><span class="text-muted">例：管理员添加|/sysuser/add</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group fsingle">
+                <div class="row">
+                    <label class="col-xs-3 ilabel">权限名：</label>
+                    <div class="col-xs-5">
+                        <input class="form-control" name="name" type="text" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group fsingle">
+                <div class="row">
+                    <label class="col-xs-3 ilabel">连接：</label>
+                    <div class="col-xs-5">
+                        <input class="form-control" name="mca" type="text" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group fsingle">
+                <div class="row">
+                    <label class="col-xs-3 ilabel">图标：</label>
+                    <div class="col-xs-5">
+                        <input class="form-control" name="ico" type="text" />
+                    </div>
+                    <span class="text-muted">font-awesome图标 输入fa fa- 后边的即可</span>
+                </div>
+            </div>
+            <div class="form-group fsingle">
+                <div class="row">
+                    <label class="col-xs-3 ilabel">是否菜单：</label>
+                    <div class="col-xs-5">
+                        <input class="i-checks" name="ismenu" value="1" type="checkbox" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-xs-3 control-label"></label>
+                    <div class="col-xs-5">
+                        <input type="hidden" name="rid" />
+                        <input type="hidden" name="pid" />
+                        <input type="button" value="确定" class="btn btn-primary doSubmit"/>
+                        <button type="button" class="btn btn-danger closeModal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+</div>
+</div><!--modal-->
+
+</div><!--wrapper-->
+{/block}
+
+{block name="script"}
+<!--公共JS-->
+{include file="common/commjs" /}
+<script type="text/javascript" src="__CDN__/assets/libs/vue/vue.min.js?v={$Think.config.site.version}"></script>
+<script type="text/javascript">
+    var vueApp = new Vue({
+        el: '#app',
+        data: {
+            curridx: 0,
+            recoid: 0,
+            dds: {$raw}
+        },
+        mounted: function() {
+
+        },
+        methods: {
+            addItem: function(ind, id) {
+                $('#editModal input[name="pid"]').val(id);
+                $('#editModal input[name="rid"]').val(0);
+                $('#editModal').modal('show');
+            },
+            editItem: function(ind, id) {
+                var name = this.dds[ind].orign_name;
+                var mca = this.dds[ind].mca;
+                var ico = this.dds[ind].ico;
+                var ismenu = this.dds[ind].ismenu;
+
+                $('#editModal input[name="pid"]').val(0);
+                $('#editModal input[name="rid"]').val(id);
+                $('#editModal input[name="name"]').val(name);
+                $('#editModal input[name="mca"]').val(mca);
+                $('#editModal input[name="ico"]').val(ico);
+
+                if (ismenu == '1') {
+                    $('#editModal input[name="ismenu"]').iCheck('check');
+                } else {
+                    $('#editModal input[name="ismenu"]').iCheck('upcheck');
+                }
+                $('#editModal .colbatch').hide();
+                $('#editModal').modal('show');
+            },
+            delItem: function(ind, id) {
+                var $vue = this;
+                $.ajax({
+                    type: 'post',
+                    url: '{:Url("/authrule/auth_del")}',
+                    dataType: 'json',
+                    data: {'rid': id},
+                    success: function (data) {
+                        if (data['code'] == 500) {
+                            alertError(data['message']);
+                        } else {
+                            $vue.dds.splice(ind, 1);
+                        }
+                    }
+                });
+            },
+            ordItem: function(ind, id) {
+                var $vue = this;
+                var ord = this.dds[ind].ord;
+                $.ajax({
+                    type: 'post',
+                    url: '{:Url("/authrule/auth_ordset")}',
+                    dataType: 'json',
+                    data: {'rid': id, 'ord': ord},
+                    success: function (data) {
+                        if (data['code'] == 500) {
+                            alertError(data['message']);
+                        } else {
+                            $vue.dds = data;
+                        }
+                    }
+                });
+            },
+            submitForm: function() {
+
+            }
+        }
+    });
+
+    $(function () {
+        // 复选框按钮样式
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green'
+        });
+        // $('.i-checks').on('ifChecked', function(event){
+        //     alert(event.type + ' callback');
+        // });
+
+        // 表单重置
+        var formReset = function (former) {
+            former[0].reset(); // former[0]转化成DOM对象
+            $('#editModal .colbatch').show();
+            $('#editModal .fmulti').hide();
+            $('#editModal .fsingle').show();
+            former.find('.i-checks').iCheck('update'); // 同步icheck状态
+        };
+
+        $('#editModal .isbatch').on('ifChanged', function () {
+            if ($(this).prop('checked') === true) {
+                $('#editModal .fmulti').show();
+                $('#editModal .fsingle').hide();
+            } else {
+                $('#editModal .fmulti').hide();
+                $('#editModal .fsingle').show();
+            }
+        });
+
+        $('#editModal .doSubmit').on('click', function () {
+            var former = $(this).parents('form:first');
+            var selize = former.serialize();
+            var rid = $('#editModal input[name="rid"]').val();
+            if (rid == 0) {
+                $.ajax({
+                    type: 'post',
+                    url: '{:Url("/authrule/auth_add")}',
+                    dataType: 'json',
+                    data: selize,
+                    success: function (data) {
+                        if (data['code'] == 500) {
+                            alertError(data['message']);
+                        } else {
+                            // 更新Vue视图
+                            vueApp.dds = data;
+                            formReset(former);
+                            $('#editModal').modal('hide');
+                        }
+                    }
+                });
+            } else {
+                $.ajax({
+                    type: 'post',
+                    url: '{:Url("/authrule/auth_update")}',
+                    dataType: 'json',
+                    data: selize,
+                    success: function (data) {
+                        if (data['code'] == 500) {
+                            alertError(data['message']);
+                        } else {
+                            // 更新Vue视图
+                            vueApp.dds = data;
+                            formReset(former);
+                            $('#editModal').modal('hide');
+                        }
+                    }
+                });
+            }
+
+        });
+
+        $('#editModal .closeModal').on('click', function () {
+            var former = $(this).parents('form:first');
+            formReset(former);
+            $('#editModal').modal('hide');
+        });
+    });
+</script>
+{/block}

@@ -1,0 +1,222 @@
+{extend name="layout/base" /}
+{block name="style"}
+<style type="text/css">
+    html,body {
+        overflow-x: hidden;
+    }
+</style>
+{/block}
+{block name="body"}
+<div id="wrapper">
+    {include file="common/navigation" /}
+    {include file="common/sidebar_left" /}
+    <!-- iframe部分/S -->
+    <div id="page-wrapper" class="gray-bg dashbard-1">
+        <div class="row J_mainContent" id="content-main">
+            <iframe class="J_iframe" id="J_iframe" name="iframe" width="100%" height="100%" src="{:Url('dashboard/index', '', false, true)}" frameborder="0" seamless></iframe>
+        </div>
+    </div>
+    <!-- iframe部分/E -->
+    {include file="common/sidebar_right" /}
+</div>
+{/block}
+
+{block name="script"}
+<!-- 全局js -->
+<script type="text/javascript" src="__CDN__/assets/libs/metisMenu/jquery.metisMenu.js"></script>
+<script type="text/javascript" src="__CDN__/assets/libs/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!--页面加载进度条-->
+<script type="text/javascript" src="__CDN__/assets/libs/pace/pace.min.js"></script>
+
+<!-- 自定义js -->
+<script type="text/javascript" src="__CDN__/assets/admin/js/hplus.js?v={$Think.config.site.version}"></script>
+<script type="text/javascript" src="__CDN__/assets/admin/js/contabs.js?v={$Think.config.site.version}"></script>
+
+<script type="text/javascript">
+    /**
+     * 导航菜单
+     */
+    var MENU = {$menu};
+    //一级菜单展示
+    $(function() {
+        // iframe加载事件
+        var J_iframe = $(".J_iframe"),
+            contentHeight = 0;
+        $(J_iframe.document).ready(function() {
+            setHeight();
+            J_iframe.show();
+        });
+
+        function setHeight() {
+            contentHeight = $("body").height() - $(".navbar").height() - 2;
+            // $("#page-wrapper").height($("body").height());
+            $("#page-wrapper").height(contentHeight);
+            // console.log($("body").height());
+            // console.log(contentHeight);
+        }
+
+        // 文档窗口改变大小时触发
+        $(window).on('resize', function() {
+            setTimeout(function() {
+                setHeight();
+            }, 100);
+        });
+
+        // 导航渲染,不添加禁用的菜单
+        // var navHtml = ['<li class="hidden-xs active"><a class="right-sidebar-toggle" aria-expanded="false" data-title="home" href="{:Url('dashboard/index', '', false, true)}">首页</a></li>'];
+        var navHtml = [];
+        $.each(MENU, function(i, o) {
+            //if(o.status == 1){
+            navHtml.push('<li class="hidden-xs"><a class="right-sidebar-toggle" title="' + o.name + '" data-id="' + o.id + '" id="menu_' + o.id + '" aria-expanded="false">' + o.name + '</a></li>');
+            //}
+        });
+        $('#J_navbar').html(navHtml.join(''));
+        // 导航点击
+        $('#J_navbar').on('click', 'a', function(e) {
+            var c = $(this).data('title'),
+                href = $(this).attr('href'),
+                J_sidebar = $('#J_sidebar');
+            if(c == 'home'){
+                $(this).parent().addClass('active').siblings().removeClass('active');
+                J_sidebar.html('');
+                J_iframe.attr("src", href);
+                return false;
+            }
+            e.preventDefault(); // 取消事件的默认动作
+            e.stopPropagation(); // 终止事件 不再派发事件
+            $(this).parent().addClass('active').siblings().removeClass('active');
+            var navbarId = $(this).attr('data-id'),
+                sidebarList = MENU['menu_' + navbarId],
+                sidebarHtml = [],
+                sidebarSubHtml = [],
+                sidebarIndex = 0;
+            if (J_sidebar.attr('data-id') == navbarId) {
+                //return false;
+            }
+
+            // 显示左侧菜单
+            showSidebar(sidebarList['children']);
+            J_sidebar.html(sidebarHtml.join('')).attr('data-id', navbarId);
+
+            function showSidebar(data) {
+                for (var attr in data) {
+                    if (data[attr] && typeof(data[attr]) === 'object') {
+                        // 循环子对象
+                        if (!data[attr].url && attr === 'children') {
+                            // 子菜单添加识别属性
+                            $.each(data[attr], function(i, o) {
+                                sidebarIndex++;
+                                o.isChild = true;
+                                o.sidebarIndex = sidebarIndex;
+                            });
+                        }
+                        showSidebar(data[attr]); // 递归(筛选子菜单)
+                    } else {
+                        if (attr === 'name') {
+                            data.url = data.url ? data.url : 'javascript:;';
+                            icon = data.icon ? '<i class="fa fa-' + data.icon + '"></i>' : '<i class="fa fa-circle-o"></i>';
+                            if (!(data['isChild'])) {
+                                // 一级，不添加禁用的菜单
+                                //if(data.status == 1) {
+                                var c = sidebarIndex==0 ? 'active' : '';
+                                sidebarHtml.push('<li class="menuli '+c+'" id="menu_' + data.id + '"><a href="javascript:;" data-id="' + data.id + '">' + icon + '<span class="nav-label">' + data.name + '</span><span class="fa arrow"></span></a>');
+                                //}
+                            } else {
+                                // 二级，不添加禁用的菜单
+                                //if(data.status == 1){
+                                sidebarSubHtml.push('<li><a class="J_menuItem" href="' + data.url + '" data-id="' + data.id + '" data-index="0">' + data.name + '</a></li>');
+                                //}
+
+                                // 二级全部push完毕
+                                if (data.sidebarIndex == sidebarIndex) {
+                                    sidebarHtml.push('<ul class="nav nav-second-level collapse">' + sidebarSubHtml.join('') + '</ul></li>');
+                                    sidebarSubHtml = [];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // MetsiMenu
+            $('#J_sidebar').metisMenu({
+                toggle: true, // 是否自动折叠非当前菜单
+                activeClass: 'active',
+                collapseClass: 'collapse'
+            });
+
+            //侧边栏第一个导航触发点击事件
+            $("#J_sidebar").children('li.active').children("ul.in").children('li').eq(0).find('a').trigger('click');
+
+        });
+        // 自动点击第一个菜单
+        $('#J_navbar>li.hidden-xs>a').trigger('click');
+
+        // 侧边栏点击监听
+        //var secondActive = null;
+        $('#J_sidebar').on('click', 'a', function(e) {
+            e.preventDefault();
+            var href = $(this).attr("href");
+            if (href == '/board.php/kefu/index') {
+                window.open('/board.php/kefu/index', 'seakefu');
+                return false;
+            }
+            if (href != 'javascript:;') {
+                J_iframe.attr("src", href);
+            }
+            // 子菜单选中
+            if ($(this).parent().parent().hasClass('nav-second-level')) {
+                $(this).parents('#J_sidebar').find('a.J_menuItem').removeClass('active');
+                $(this).parents('.nav-second-level').children('li').eq($(this).parent().index()).children('a.J_menuItem').addClass('active');
+
+                /*if (secondActive !== null) {
+                    secondActive.removeClass('active');
+                }
+                $(this).addClass('active');
+                secondActive = $(this);*/
+            }
+        });
+        // 用户信息栏点击
+        $('#J_userinfo').on('click', 'a', function(e) {
+            e.preventDefault();
+            var href = $(this).attr("href");
+            J_iframe.attr("src", href);
+        });
+
+
+        $('.wipecache').on('click', 'a', function(e) {
+            var type = $(this).data('type');
+            $.get('{:Url("/ajax/wipecache")}?type='+type, function () {
+                alertSuccess('操作成功');
+            });
+        });
+    });
+
+    function showMenu(id){
+        // 废弃!!!
+        if($('#menu_'+id).hasClass('active')){
+            $('#menu_'+id+' ul').hide();
+            $('#menu_'+id).removeClass('active');
+        }else{
+            $('#J_sidebar .menuli ul').hide();
+            $('#J_sidebar .menuli').removeClass('active');
+
+            $('#J_sidebar').children('li').removeClass('active');
+            $('#menu_'+id).addClass('active');
+
+            $('#J_sidebar').children('li').children('ul').hide();
+            $('#menu_'+id+' ul').show();
+        }
+
+        /*
+        if($("#menu_"+id+" ul").is(":hidden")){
+            $("#menu_"+id).addClass('active');
+        }else{
+            $("#menu_"+id).removeClass('active');
+        }
+
+        $("#menu_"+id+" ul").toggle();*/
+
+    }
+</script>
+{/block}

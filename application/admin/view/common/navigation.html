@@ -1,0 +1,71 @@
+<nav class="navbar navbar-static-top relative" role="navigation" style="margin-bottom: 0; border-bottom: 1px solid #2f4050; word-wrap:break-word;">
+    <div class="navbar-header">
+        <div class="nav navbar-left pull-left" style="text-align: center; background-color: #2f4050;">
+            <div class="profile-element pull-left" style="width: 220px; line-height: 61px;">
+                <img src="__CDN__/assets/admin/img/login-logo.png" width="220" />
+            </div>
+            <div class="logo-element"><img src="__CDN__/assets/admin/img/logo.png" width="48" /></div>
+        </div>
+        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary pull-left" role="button"><i class="fa fa-bars"></i></a>
+        <ul class="nav navbar-top-links navbar-left" id="J_navbar">
+            <!-- <li class="hidden-xs">
+                <a class="right-sidebar-toggle" aria-expanded="false">导航示例</a>
+            </li> -->
+        </ul>
+    </div>
+    <ul class="nav navbar-top-links navbar-right absolute" style="right:0">
+        <!-- <li class="dropdown">
+            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                <i class="fa fa-envelope"></i> <span class="label label-warning">16</span>
+            </a>
+            <ul class="dropdown-menu dropdown-messages">
+                <li class="m-t-xs">
+                    <div class="dropdown-messages-box">
+                        <a href="profile.html" class="pull-left">
+                            <img alt="image" class="img-circle" src="__CDN__/assets/admin/img/a7.jpg">
+                        </a>
+                        <div class="media-body">
+                            <small class="pull-right">46小时前</small>
+                            <strong>小四</strong> 最新消息一
+                            <br>
+                            <small class="text-muted">3天前 2014.11.8</small>
+                        </div>
+                    </div>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <div class="text-center link-block">
+                        <a class="J_menuItem" href="mailbox.html">
+                            <i class="fa fa-envelope"></i> <strong> 查看所有消息</strong>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </li> -->
+        <li class="dropdown">
+            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                <i class="fa fa-trash"></i> 清理缓存
+            </a>
+            <ul class="dropdown-menu wipecache">
+                <li><a href="javascript:;" data-type="all"><i class="fa fa-trash"></i> 一键清除缓存</a></li>
+                <li class="divider"></li>
+                <li><a href="javascript:;" data-type="content"><i class="fa fa-file-text"></i> 清空内容缓存</a></li>
+                <li><a href="javascript:;" data-type="template"><i class="fa fa-file-image-o"></i> 清除模板缓存</a></li>
+                <li><a href="javascript:;" data-type="addons"><i class="fa fa-rocket"></i> 清除插件缓存</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a aria-expanded="false" role="button" href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                <span class="project-people">
+                    <img class="img-circle" src="__CDN__/assets/admin/img/avatar.png" />
+                </span>
+                {$admin.nickname}
+                <span class="caret"></span>
+            </a>
+            <ul role="menu" class="dropdown-menu">
+                <li id="J_userinfo"><a href="{:Url('profile/index')}"><i class="fa fa fa-gear"></i> 账号设置</a></li>
+                <li><a href="{:Url('index/logout')}"><i class="fa fa fa-sign-out"></i> 安全退出</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>

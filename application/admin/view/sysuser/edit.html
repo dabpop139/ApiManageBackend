@@ -1,0 +1,105 @@
+{extend name="layout/base" /}
+
+{block name="style"}
+<style type="text/css">
+    /*.table>tbody>tr>td{padding: 3px 5px;}*/
+</style>
+{/block}
+
+{block name="body"}
+<div class="wrapper wrapper-content">
+
+<div class="row animated fadeIn">
+    <div class="col-xs-12">
+        <div class="ibox box-success">
+            <div class="ibox-title">
+                <h5>{$boxti}</h5>
+            </div>
+            <div class="panel-body ibox-content mainbox">
+                <form action="" method="post">
+                <div class="col-xs-10">
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-xs-2 ilabel">用户名：</label>
+                            <div class="col-xs-5">
+                                <input class="form-control" name="username" value="{$data.username ?? ''}" type="text" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-xs-2 ilabel">昵称：</label>
+                            <div class="col-xs-5">
+                                <input class="form-control" name="nickname" value="{$data.nickname ?? ''}" type="text" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-xs-2 ilabel">Email：</label>
+                            <div class="col-xs-5">
+                                <input class="form-control" name="email" value="{$data.email ?? ''}" type="text" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-xs-2 ilabel">密码：</label>
+                            <div class="col-xs-5">
+                                <input class="form-control" name="password" type="password" placeholder="留空不修改密码" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-xs-2 ilabel">状态：</label>
+                            <div class="col-xs-5">
+                                <label class="ilabel">
+                                    <input class="i-checks" name="status" value="normal" type="radio"
+                                        {if !isset($data.status)} checked="checked"{/if}
+                                        {if isset($data.status) && $data.status=='normal'} checked="checked"{/if}
+                                    />启用
+                                </label>&nbsp;
+                                <label class="ilabel">
+                                    <input class="i-checks" name="status" value="hidden" type="radio"
+                                        {if isset($data.status) && $data.status=='hidden'} checked="checked"{/if}
+                                    />禁用
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-xs-2 control-label"></label>
+                            <div class="col-xs-5">
+                                <input type="hidden" name="rid" value="{$data.id ?? ''}" />
+                                <input type="submit" value="提交" class="btn btn-primary"/>&nbsp;&nbsp;
+                                <input type="button" value="返回" class="btn btn-white" onclick="window.history.go(-1)"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div><!--panel-body-->
+        </div><!--ibox-->
+
+    </div><!--col-md-->
+</div>
+
+</div><!--wrapper-->
+{/block}
+
+{block name="script"}
+<!--公共JS-->
+{include file="common/commjs" /}
+<script type="text/javascript">
+
+    $(function () {
+        // 复选框按钮样式
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green'
+        });
+    });
+</script>
+{/block}

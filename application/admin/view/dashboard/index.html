@@ -1,0 +1,31 @@
+{extend name="layout/base" /}
+
+{block name="style"}
+    <!-- page -->
+{/block}
+
+{block name="body"}
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="middle-box text-center animated fadeInDown" style="max-width: 800px; padding-top: 0; margin-top: 50px;">
+            <div class="alert alert-success">
+                您好：{$admin.username}，欢迎登录系统
+                <br/>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+    $(function(){
+        $(".event").on('click',function () {
+            parent.$('#menu_2').trigger('click');
+            parent.$("#J_sidebar").children('li').removeClass('active').children('ul').removeClass('in');
+            // parent.$('#menu_19').addClass('active').children('ul').addClass('in');
+            parent.$('#J_sidebar').find('ul.in').children('li').eq(0).children('a').addClass('active');
+        });
+    })
+</script>
+{/block}

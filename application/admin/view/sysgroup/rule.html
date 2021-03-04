@@ -1,0 +1,101 @@
+{extend name="layout/base" /}
+
+{block name="style"}
+<style type="text/css">
+    .mainbox .cklabel{display: block; margin: 4px 0px;}
+    .mainbox .cklabel_lv1,
+        .mainbox .cklabel_lv2,
+        .mainbox .cklabel_lv3{border-bottom:1px dotted #eee; margin-top: 6px;}
+    .mainbox .tspace{display: inline-block; width: 90px;}
+    .mainbox .cklabel_lv4,
+        .mainbox .cklabel_lv5{display: inline-block;}
+</style>
+{/block}
+
+{block name="body"}
+<div class="wrapper wrapper-content">
+
+<div class="row animated fadeIn">
+    <div class="col-xs-12">
+        <div class="ibox box-success">
+            <div class="ibox-title">
+                <h5>为<span class="text-danger">{$group['name']}</span>分配权限</h5>
+            </div>
+            <div class="panel-body ibox-content mainbox">
+                <form action="" method="post">
+                <div class="col-xs-12">
+                    {foreach $datas as $v}
+                    {php}
+                    if($v['layer_step']<=3){
+                        $newline = false;
+                    }
+                    if($v['layer_step']>3 && $newline==false){
+                        $newline = true;
+                        echo '<span class="cklabel tspace"></span>';
+                    }
+                    {/php}
+                    <span class="cklabel cklabel_lv{$v['layer_step']}"
+                        {php}if($v['layer_step']<=3){echo ' style="padding-left:'.($v['layer_step']*15).'px;"';}{/php}
+                    >
+                        {if $v['layer_step']<=3}
+                            <b>{$v['orign_name']}</b>
+                        {else}
+                            {$v['orign_name']}
+                        {/if}
+                        <input type="checkbox" class="i-checks" level="{$v['layer_step']}" name="rule_ids[]" value="{$v['id']}"{php}if(in_array($v['id'],$group['rules'])){echo ' checked="checked"';}{/php} />
+                    </span>
+                    {/foreach}
+                </div>
+                <div class="col-xs-12 m-t-md">
+                    <div class="col-xs-6">
+                        <input type="hidden" name="id" value="{$group['id']}" />
+                        <input class="btn btn-success" type="submit" value="提交" />
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+
+    </div><!--col-md-->
+</div>
+
+</div><!--wrapper-->
+{/block}
+
+{block name="script"}
+<!--公共JS-->
+{include file="common/commjs" /}
+<script type="text/javascript">
+    $(function () {
+        // 复选框按钮样式
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green'
+        });
+
+        $('.mainbox .i-checks').on('ifChanged', function(event){
+            var delFlag = $(this).is(':checked');
+            var level = $(this).attr('level');
+            level = parseInt(level);
+
+            // 第一层不处理
+            if (level == 1) {
+                return;
+            }
+
+            $(this).parents('.cklabel:first').nextAll().find('.i-checks').each(function () {
+                // console.log($(this));
+                if (parseInt($(this).attr('level')) > level) {
+                    if(delFlag) {
+                        $(this).iCheck('check');
+                    } else {
+                        $(this).iCheck('uncheck');
+                    }
+                } else {
+                    return false;
+                }
+            });
+        });
+    });
+</script>
+{/block}
