@@ -4,6 +4,7 @@ runtime/
 .idea/workspace.xml
 .vscode/
 .env
+.env.bak
 composer.lock
 .DS_Store
 */.DS_Store
