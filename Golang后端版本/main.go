@@ -137,7 +137,7 @@ func apictrlHandle(w http.ResponseWriter, r *http.Request) {
 
 		hasRec := new(models.ApiResource)
 		hasRec.Apiname = apiname
-		models.MyOrm.Where("apiname = ?", hasRec.Apiname).First(hasRec)
+		models.MyOrm.Where("cateid = ? AND apiname = ?", cateid, hasRec.Apiname).First(hasRec)
 
 		if aid <= 0 {
 			if hasRec.Id > 0 {
