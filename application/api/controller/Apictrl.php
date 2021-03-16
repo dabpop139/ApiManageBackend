@@ -76,7 +76,7 @@ class Apictrl extends Api
             ];
 
             $apiRes = new ApiResource();
-            $hasRec = ApiResource::where(['apiname' => $apiname])->find();
+            $hasRec = ApiResource::where(['cateid' => $cateid, 'apiname' => $apiname])->find();
             if ($aid == 0) {
                 if ($hasRec) {
                     $this->error('接口名称有重名');
