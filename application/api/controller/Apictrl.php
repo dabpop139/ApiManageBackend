@@ -222,6 +222,7 @@ class Apictrl extends Api
             $cateid    = intval($post['cateid']);
             $act       = trim($post['act']);
             $name      = trim($post['name']);
+            $ord       = intval(trim($post['ord']));
 
             if ($act == 'save') {
                 if (!isset($post['name'])) {
@@ -234,7 +235,7 @@ class Apictrl extends Api
                         'name'=> $name,
                     ]);
                 } else {
-                    $result = $category->editData(['id' => $cateid], ['name'=> $name]);
+                    $result = $category->editData(['id' => $cateid], ['name'=> $name, 'ord' => $ord]);
                 }
 
                 if ($result === false) {
@@ -261,7 +262,7 @@ class Apictrl extends Api
         if (!$category) {
             $this->error(__('Invalid parameters'));
         }
-        $subCategorys = ApiCategory::where(['pid' => $category['id']])->select();
+        $subCategorys = ApiCategory::where(['pid' => $category['id']])->order('ord DESC')->select();
 
         $cateids = [];
         foreach ($subCategorys as $item) {
