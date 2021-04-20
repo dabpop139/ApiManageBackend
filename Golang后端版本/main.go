@@ -157,7 +157,7 @@ func apictrlHandle(w http.ResponseWriter, r *http.Request) {
 			}
 			// 重复利用hasRec
 			hasRec.Id = aid
-			err := models.MyOrm.Where("id = ?", hasRec.Id).First(hasRec).Updates(apiRes).Error
+			err := models.MyOrm.Where("id = ?", hasRec.Id).First(hasRec).Updates(saveData).Error
 			if err != nil {
 				resp.ReturnError(http.StatusOK, 0, "操作失败")
 				return
