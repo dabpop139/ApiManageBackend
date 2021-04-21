@@ -181,6 +181,7 @@ class Apictrl extends Api
                     'extime' => $result['extime'],
                     'header' => $respHeader,
                     'raw'    => $result['raw'],
+                    // 'raw'    => '',
                 ]);
             }
         }
