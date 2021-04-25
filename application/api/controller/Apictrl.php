@@ -87,6 +87,19 @@ class Apictrl extends Api
                 if ($hasRec && $hasRec['id'] != $aid) {
                     $this->error('接口名称有重名');
                 }
+                $extra = [];
+                if (!empty($hasRec['extra'])) {
+                    $extra = json_decode($hasRec['extra'], true);
+                }
+
+                if (!isset($extra['apiurl_history'])) {
+                    $extra['apiurl_history'] = [];
+                }
+                $extra['apiurl_history'][] = $apiuri;
+                $extra['apiurl_history'] = array_unique($extra['apiurl_history']);
+
+                $extra = json_encode($extra);
+                $saveData['extra'] = $extra;
                 $result = $apiRes->editData(['id' => $aid], $saveData);
             }
 
