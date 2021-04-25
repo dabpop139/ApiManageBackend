@@ -264,7 +264,7 @@ func apictrlHandle(w http.ResponseWriter, r *http.Request) {
 				var err error
 				respRet, err = rqClient.Post(apiuri)
 				if err != nil {
-					resp.ReturnError(http.StatusOK, 0, "请求响应错误！尝试切换请求方式")
+					resp.ReturnError(http.StatusOK, 0, "请求响应错误！尝试切换请求方式/协议")
 					return
 				}
 			}
