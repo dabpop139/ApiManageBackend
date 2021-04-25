@@ -439,7 +439,7 @@ func apictrlCategory(w http.ResponseWriter, r *http.Request) {
 	if keyword != "" {
 		dbQuery = dbQuery.Where("apiname LIKE ? OR apiuri LIKE ?", "%"+keyword+"%", "%"+keyword+"%")
 	}
-	dbQuery.Order("updatetime DESC").Find(&apiRecs)
+	dbQuery.Order("apiname DESC").Find(&apiRecs)
 
 	apisAssoc := make(map[int64][]*models.ApiResource)
 	for _, v := range apiRecs {
