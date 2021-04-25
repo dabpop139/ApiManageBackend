@@ -274,7 +274,7 @@ class Apictrl extends Api
         if (!empty($keyword)) {
             $where['apiname|apiuri'] = ['like', '%'.$keyword.'%'];
         }
-        $apis = ApiResource::field('id,projectid,cateid,apiname,apiuri,reqmethod,createtime,updatetime')->where($where)->order('updatetime DESC')->select();
+        $apis = ApiResource::field('id,projectid,cateid,apiname,apiuri,reqmethod,createtime,updatetime')->where($where)->order('apiname DESC')->select();
         $apisAssoc = [];
         foreach ($apis as $item) {
             $apisAssoc[$item['cateid']][] = $item;
