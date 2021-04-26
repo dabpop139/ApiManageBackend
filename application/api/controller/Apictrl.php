@@ -95,8 +95,13 @@ class Apictrl extends Api
                 if (!isset($extra['apiurl_history'])) {
                     $extra['apiurl_history'] = [];
                 }
-                $extra['apiurl_history'][] = $apiuri;
+                array_unshift($extra['apiurl_history'], $apiuri);
                 $extra['apiurl_history'] = array_unique($extra['apiurl_history']);
+                foreach ($extra['apiurl_history'] as $key => $item) {
+                    if ($key > 10) {
+                        unset($extra['apiurl_history'][$key]);
+                    }
+                }
 
                 $extra = json_encode($extra);
                 $saveData['extra'] = $extra;
