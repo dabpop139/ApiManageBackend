@@ -96,7 +96,7 @@ class Apictrl extends Api
                     $extra['apiurl_history'] = [];
                 }
                 array_unshift($extra['apiurl_history'], $apiuri);
-                $extra['apiurl_history'] = array_unique($extra['apiurl_history']);
+                $extra['apiurl_history'] = array_values(array_unique($extra['apiurl_history']));
                 foreach ($extra['apiurl_history'] as $key => $item) {
                     if ($key > 10) {
                         unset($extra['apiurl_history'][$key]);
