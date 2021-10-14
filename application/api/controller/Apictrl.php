@@ -182,7 +182,7 @@ class Apictrl extends Api
                 // print_r($reqHeaders);
                 // print_r($reqBody);
                 // die;
-                $result = CurlSend($apiuri, $reqmethod, $reqBody, $reqHeaders);
+                $result = CurlSend($apiuri, $reqmethod, $reqBody, $reqHeaders, 1800);
 
                 if ($result === false) {
                     $this->error('请求响应错误！尝试切换请求方式/协议');
