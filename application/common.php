@@ -628,7 +628,7 @@ if (!function_exists('sysAuth')) {
     function sysAuth($string, $operation = 'ENCODE', $key = '', $expiry = 0)
     {
         $key_length = 4;
-        $key = md5($key != '' ? $key : '{!!!ENCRYPT_KEY!!!}');
+        $key = md5($key != '' ? $key : '{~~ENCRYPT_KEY~~}');
         $fixedkey = md5($key);
         $egiskeys = md5(substr($fixedkey, 16, 16));
         $runtokey = $key_length ? ($operation == 'ENCODE' ? substr(md5(microtime(true)), -$key_length) : substr($string, 0, $key_length)) : '';
