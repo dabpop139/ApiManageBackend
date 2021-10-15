@@ -53,7 +53,7 @@ class Apictrl extends Api
         $rbody   = trim($post['rbody']);
         $rbody   = html_entity_decode($rbody);
 
-        $docbody = $post['docbody'];
+        $docbody = isset($post['docbody']) ? $post['docbody'] : '';
         $docbody = html_entity_decode($docbody);
 
         $act = $post['act'];
