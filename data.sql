@@ -27,6 +27,7 @@ CREATE TABLE `fa_api_resource` (
   `reqmethod` varchar(20) NOT NULL DEFAULT '' COMMENT '请求方式',
   `rawdata` mediumtext CHARACTER SET utf8mb4 COMMENT 'JSON数据',
   `respraw` mediumtext CHARACTER SET utf8mb4 COMMENT '响应内容',
+  `docbody` mediumtext CHARACTER SET utf8mb4 COMMENT '文档内容',
   `createtime` int(10) NOT NULL DEFAULT '0' COMMENT '创建时间',
   `updatetime` int(10) NOT NULL DEFAULT '0' COMMENT '更新时间',
   `reqscheme` varchar(255) DEFAULT NULL,
@@ -36,7 +37,8 @@ CREATE TABLE `fa_api_resource` (
   `rbody_chk` tinyint(1) DEFAULT NULL,
   `rheader` varchar(255) DEFAULT NULL,
   `rbody` varchar(255) DEFAULT NULL,
+  `extra` text COMMENT '扩展信息',
   PRIMARY KEY (`id`),
   KEY `apiname` (`apiname`),
   KEY `apiuri` (`apiuri`(255))
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='API资源表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='API资源表';

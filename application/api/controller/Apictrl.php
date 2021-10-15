@@ -53,6 +53,9 @@ class Apictrl extends Api
         $rbody   = trim($post['rbody']);
         $rbody   = html_entity_decode($rbody);
 
+        $docbody = $post['docbody'];
+        $docbody = html_entity_decode($docbody);
+
         $act = $post['act'];
         if ($act == 'save') {
             $rawdata = [
@@ -72,7 +75,8 @@ class Apictrl extends Api
                 'apiname'   => $apiname,
                 'apiuri'    => $apiuri,
                 'reqmethod' => $reqmethod,
-                'rawdata'   => $rawdata
+                'rawdata'   => $rawdata,
+                'docbody'   => $docbody, // 接口文档
             ];
 
             $apiRes = new ApiResource();
