@@ -5,6 +5,7 @@ runtime/
 .vscode/
 .env
 .env.bak
+.env.bak2
 composer.lock
 .DS_Store
 */.DS_Store
