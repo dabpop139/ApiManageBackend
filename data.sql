@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS `fa_api_category`;
 CREATE TABLE `fa_api_category` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `pid` int(10) unsigned DEFAULT '0' COMMENT '父级ID',
-  `name` varchar(15) NOT NULL COMMENT '分类名称',
+  `name` varchar(50) NOT NULL COMMENT '分类名称',
   `ord` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
   `createtime` int(10) NOT NULL DEFAULT '0' COMMENT '创建时间',
   `updatetime` int(10) NOT NULL DEFAULT '0' COMMENT '更新时间',
